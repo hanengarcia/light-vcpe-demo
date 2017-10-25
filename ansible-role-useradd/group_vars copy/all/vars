@@ -1,0 +1,7 @@
+---
+# variable for all groups host
+#
+remote_group_name: remote
+remote_group_id: 666
+admin_user: admin
+admin_pass: "{{ vault_admin_pass }}"
