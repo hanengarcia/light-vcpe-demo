@@ -4,7 +4,6 @@
 - name: Add group for remote host
   group:
     name: "{{ remote_group_name }}"
-    comment: "group for remote devices"
     gid: "{{ remote_group_id }}"
     state: present
 
