@@ -3,19 +3,19 @@
 #
 - name: Add group for remote host
   group:
-    name: {{ remote_group_name }}
+    name: "{{ remote_group_name }}"
     comment: "group for remote devices"
-    gid: {{ remote_group_id }}
+    gid: "{{ remote_group_id }}"
     state: present
 
 - name: Add user for remote host
   user:
-    name: {{ remote_hostname }}
+    name: "{{ remote_hostname }}"
     comment: "user for device {{ remote_hostname }}"
-    group: {{ remote_group_name }}
+    group: "{{ remote_group_name }}"
     
 - name: Set authorized key from remote host
   authorized_key:
-    user: {{ remote_hostname }}
-    state: present
+    user: "{{ remote_hostname }}"
     key: "{{ remote_key_public }}"
+    state: present
