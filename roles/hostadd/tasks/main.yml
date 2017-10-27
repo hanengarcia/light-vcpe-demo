@@ -25,6 +25,11 @@
     tower_username: "{{ tower_username }}"
     tower_password: "{{ tower_password }}"
 
+- name: Create local private key directory
+  file:
+    path: "/tmp/75BCD15/3ADE68B1/{{ remote_hostname }}"
+    state: directory
+
 - name: Create local private key file
   template:
     src: decoded_key.j2
@@ -43,7 +48,7 @@
     tower_username: "{{ tower_username }}"
     tower_password: "{{ tower_password }}"
 
-- name: Remove local private key file
+- name: Remove local private key directory
   file:
     path: "/tmp/75BCD15/3ADE68B1/{{ remote_hostname }}"
     state: absent
