@@ -44,6 +44,7 @@
     ssh_key_data: "/tmp/3ADE68B1-75BCD15/{{ remote_hostname }}/KEY"
     state: present
     tower_verify_ssl: False
+    credential_type: "Machine"
     tower_host: "{{ tower_host }}"
     tower_username: "{{ tower_username }}"
     tower_password: "{{ tower_password }}"
