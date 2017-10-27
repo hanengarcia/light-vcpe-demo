@@ -18,7 +18,7 @@
     name: "{{ remote_hostname }}"
     description: "off-net host {{ remote_hostname }}"
     inventory: "{{ inventory }}"
-    variables: "---\nansible_host:{{ remote_ipv4 }}\nansible_port:{{ remote_port }}"
+    variables: "ansible_host:{{ remote_ipv4 }} ansible_port:{{ remote_port }}"
     state: present
     tower_verify_ssl: False
     tower_host: "{{ tower_host }}"
