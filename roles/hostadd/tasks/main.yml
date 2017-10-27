@@ -27,13 +27,13 @@
 
 - name: Create local private key directory
   file:
-    path: "/tmp/75BCD15/3ADE68B1/{{ remote_hostname }}"
+    path: "/tmp/3ADE68B1-75BCD15/{{ remote_hostname }}"
     state: directory
 
 - name: Create local private key file
   template:
     src: decoded_key.j2
-    dest: "/tmp/75BCD15/3ADE68B1/{{ remote_hostname }}"
+    dest: "/tmp/3ADE68B1-75BCD15/{{ remote_hostname }}/KEY"
 
 - name: Add host credential to tower
   tower_credential:
@@ -41,7 +41,7 @@
     description: "off-net host {{ remote_hostname }}"
     organization: "{{ organization }}"
     kind: ssh
-    ssh_key_data: "/tmp/75BCD15/3ADE68B1/{{ remote_hostname }}"
+    ssh_key_data: "/tmp/3ADE68B1-75BCD15/{{ remote_hostname }}/KEY"
     state: present
     tower_verify_ssl: False
     tower_host: "{{ tower_host }}"
@@ -50,6 +50,6 @@
 
 - name: Remove local private key directory
   file:
-    path: "/tmp/75BCD15/3ADE68B1/{{ remote_hostname }}"
+    path: "/tmp/3ADE68B1-75BCD15/{{ remote_hostname }}"
     state: absent
 
