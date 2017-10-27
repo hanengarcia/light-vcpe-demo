@@ -15,8 +15,8 @@
 
 - name: Add host to tower inventory
   tower_host:
-    name: "{{ ssh_hostname }}"
-    description: "off-net host {{ ssh_hostname }}"
+    name: "{{ remote_hostname }}"
+    description: "off-net host {{ remote_hostname }}"
     inventory: "{{ inventory }}"
     variables: "---"
     state: present
@@ -28,7 +28,7 @@
 - name: Add host credential to tower
   tower_credential:
     name: "{{ remote_hostname }}"
-    description: "off-net host {{ ssh_hostname }}"
+    description: "off-net host {{ remote_hostname }}"
     organization: "{{ organization }}"
     kind: ssh
     ssh_key_data: "{{ remote_key_private | b64decode }}"
