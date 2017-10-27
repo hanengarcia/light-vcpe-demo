@@ -6,5 +6,7 @@ organization: "Keep|Touch Corp"
 inventory: "Branch Offices"
 
 tower_host: "https://tower.keepontouch.net"
+username: "root"
+credential_type: "Machine"
 #tower_username: "{{ vault_tower_username }}"
 #tower_password: "{{ vault_tower_password }}"
