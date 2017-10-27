@@ -1,4 +1,6 @@
 ---
 - hosts: all
   roles:
-    - ansible-role-hostadd
+    - hostadd
+  vars_files:
+    - roles/hostadd/vars/vault

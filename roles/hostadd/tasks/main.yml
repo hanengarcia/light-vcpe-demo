@@ -6,6 +6,7 @@
     name: "{{ inventory }}"
     description: "off-net hosts inventory"
     organization: "{{ organization }}"
+    variables: "---"
     state: present
     tower_verify_ssl: False
     tower_host: "{{ tower_host }}"
@@ -17,7 +18,7 @@
     name: "{{ ssh_hostname }}"
     description: "off-net host {{ ssh_hostname }}"
     inventory: "{{ inventory }}"
-    variables:
+    variables: "---"
     state: present
     tower_verify_ssl: False
     tower_host: "{{ tower_host }}"
@@ -30,7 +31,7 @@
     description: "off-net host {{ ssh_hostname }}"
     organization: "{{ organization }}"
     kind: ssh
-    ssh_key_data: {{ remote_key_private | b64decode }}
+    ssh_key_data: "{{ remote_key_private | b64decode }}"
     state: present
     tower_verify_ssl: False
     tower_host: "{{ tower_host }}"
