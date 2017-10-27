@@ -1,0 +1,29 @@
+---
+# tasks to add host to tower inventory
+#
+- name: Add tower inventory
+  tower_inventory:
+    name: "{{ inventory }}"
+    description: "off-net hosts inventory"
+    organization: "{{ organization }}"
+    state: present
+    tower_verify_ssl: False
+
+- name: Add host to tower inventory
+  tower_host:
+    name: "{{ ssh_hostname }}"
+    description: "off-net host {{ ssh_hostname }}"
+    inventory: "{{ inventory }}"
+    variables:
+    state: present
+    tower_verify_ssl: False
+
+- name: Add host credential to tower
+  tower_credential:
+    name: "{{ remote_hostname }}"
+    description: "off-net host {{ ssh_hostname }}"
+    organization: "{{ organization }}"
+    kind: ssh
+    ssh_key_data: {{ remote_key_private | b64decode }}
+    state: present
+    tower_verify_ssl: False

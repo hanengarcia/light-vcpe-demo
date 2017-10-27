@@ -1,0 +1,11 @@
+---
+# variable for all groups host
+#
+
+organization: "Keep|Touch Corp"
+inventory: "Branch Offices"
+
+tower_host: "tower.keepontouch.net" 
+tower_username: admin
+tower_password: "{{ vault_admin_pass }}"
+

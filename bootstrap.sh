@@ -5,21 +5,20 @@ ssh_key_private="/root/.ssh/ansible_rsa"
 ssh_key_public="/root/.ssh/ansible_rsa.pub"
 ssh_authorized_keys="/root/.ssh/authorized_keys"
 
-if [ -e $ssh_key_private]
+if [ -e $ssh_key_private ]
 then
-	echo "ssh key $ssh_key_private found, skipping"
-	cat $ssh_key_public
+	printf "ssh key $ssh_key_private found, skipping\n"
 else
-	echo "ssh key $ssh_key_private not found, generating new"
+	printf "ssh key $ssh_key_private not found, generating new\n"
 	ssh-keygen -t rsa -b 2048 -f $ssh_key_private -N ""
 fi
 
-if [ -e $ssh_authorized_keys]
+if [ -e $ssh_authorized_keys ]
 then
-	echo "ssh authorized keys $ssh_authorized_keys found, appending key"
+	printf "ssh authorized keys $ssh_authorized_keys found, appending key\n"
 	cat $ssh_key_public >> $ssh_authorized_keys
 else
-	echo "ssh authorized keys $ssh_authorized_keys not found, generating new one"
+	printf "ssh authorized keys $ssh_authorized_keys not found, generating new one\n"
 	cp $ssh_key_public $ssh_authorized_keys
 	chmod 644 $ssh_authorized_keys
 fi
@@ -27,42 +26,49 @@ fi
 ### Get Proxy credentials
 proxy_user=`hostname -s`
 proxy_host='198.154.188.151'
-proxy_port='8080'
+proxy_dest='172.28.1.20:8080'
+ssh_key_private_content=`cat $ssh_key_private | base64`
+ssh_key_public_content=`cat $ssh_key_public`
 
 ### Call Ansible Tower
-curl --silent --insecure -X POST \
+curl --fail --silent --insecure -X POST \
   https://tower.keepontouch.net:443/api/v2/job_templates/9/launch/ \
   -H 'authorization: Basic YWRtaW46cmVkaGF0OTk=' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
-  -H 'postman-token: 7aafe9c1-f3fa-60cb-8787-6567f0d19d3c' \
   -d "{
-  \"extra_vars\": 
+  \"extra_vars\":
   {
     \"remote_hostname\": \"${proxy_user}\",
-    \"remote_key_public\": \"${ssh_key_public}\"
+    \"remote_key_private\": \"${ssh_key_private_content}\",
+    \"remote_key_public\": \"${ssh_key_public_content}\"
    }
-}"
+}" > /dev/null 2>&1
 
+if [ $? -eq 0 ]; then
+    printf "Call back home is being processed\n"
+else
+	printf "Call back home failed, exiting\n"
+	exit 1;
+fi
 
 ### Establish SSH tunnel
-echo "\n\n\nssh –f –N –T –R 172.28.1.20:${proxy_port}:localhost:22 ${proxy_user}@${proxy_host}\n\n\n"
-
-echo -n "Establishing tunnel ."
+printf "Establishing tunnel ."
 
 connected=false
 while [ $connected = false ]
 do
-	# Create the SSH tunnel 
-	ssh -f -N -T -R 172.28.1.20:${proxy_port}:localhost:22 ${proxy_user}@${proxy_host}
-	
+	# Create the SSH tunnel
+	ssh -f -N -T -R ${proxy_dest}:localhost:22 ${proxy_user}@${proxy_host} \
+	    -i ${ssh_key_private} -o StrictHostKeyChecking=no 2>/dev/null
+
 	if [ $? -eq 0 ]; then
 		connected=true
-		echo " done!"
+		printf " done!\n"
 	else
 		sleep 10
-		echo -n "."
+		printf "."
 	fi
 done
 
-echo "This device is now managed via ${proxy_host}:${proxy_port}"
+printf "\n\nThis device is now managed via ${proxy_dest}\n\n"
