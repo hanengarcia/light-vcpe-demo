@@ -8,6 +8,9 @@
     organization: "{{ organization }}"
     state: present
     tower_verify_ssl: False
+    tower_host: "{{ tower_host }}"
+    tower_username: "{{ tower_username }}"
+    tower_password: "{{ tower_password }}"
 
 - name: Add host to tower inventory
   tower_host:
@@ -17,6 +20,9 @@
     variables:
     state: present
     tower_verify_ssl: False
+    tower_host: "{{ tower_host }}"
+    tower_username: "{{ tower_username }}"
+    tower_password: "{{ tower_password }}"
 
 - name: Add host credential to tower
   tower_credential:
@@ -27,3 +33,6 @@
     ssh_key_data: {{ remote_key_private | b64decode }}
     state: present
     tower_verify_ssl: False
+    tower_host: "{{ tower_host }}"
+    tower_username: "{{ tower_username }}"
+    tower_password: "{{ tower_password }}"
