@@ -12,7 +12,7 @@
     name: "{{ remote_hostname }}"
     comment: "user for device {{ remote_hostname }}"
     group: "{{ remote_group_name }}"
-    
+
 - name: Set authorized key from remote host
   authorized_key:
     user: "{{ remote_hostname }}"
