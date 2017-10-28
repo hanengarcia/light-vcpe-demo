@@ -42,9 +42,8 @@
     name: "{{ remote_hostname }}"
     description: "off-net host {{ remote_hostname }}"
     organization: "{{ organization }}"
-    inputs:
-        username: "{{ username }}"
-        ssh_key_data: "/tmp/3ADE68B1-75BCD15/{{ remote_hostname }}/KEY"
+    username: "{{ username }}"
+    ssh_key_data: "/tmp/3ADE68B1-75BCD15/{{ remote_hostname }}/KEY"
     state: present
     tower_verify_ssl: False
     credential_type: "{{ credential_type }}"
