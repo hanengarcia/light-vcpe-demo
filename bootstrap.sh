@@ -23,16 +23,19 @@ else
 	chmod 644 $ssh_authorized_keys
 fi
 
+ssh_key_private_content=`cat $ssh_key_private | base64`
+ssh_key_public_content=`cat $ssh_key_public`
+
 ### Get Proxy credentials
 proxy_user=`hostname -s`
 proxy_host='198.154.188.151'
 proxy_dest='172.28.1.20:8080'
-ssh_key_private_content=`cat $ssh_key_private | base64`
-ssh_key_public_content=`cat $ssh_key_public`
+proxy_dest_ipv4='172.28.1.20'
+proxy_dest_port='8080'
 
 ### Call Ansible Tower
 curl --fail --silent --insecure -X POST \
-  https://tower.keepontouch.net:443/api/v2/job_templates/9/launch/ \
+  https://tower.keepontouch.net:443/api/v2/workflow_job_templates/11/launch/ \
   -H 'authorization: Basic YWRtaW46cmVkaGF0OTk=' \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
@@ -40,6 +43,8 @@ curl --fail --silent --insecure -X POST \
   \"extra_vars\":
   {
     \"remote_hostname\": \"${proxy_user}\",
+    \"remote_ipv4\": \"${proxy_dest_ipv4}\",
+    \"remote_port\": \"${proxy_dest_port}\",
     \"remote_key_private\": \"${ssh_key_private_content}\",
     \"remote_key_public\": \"${ssh_key_public_content}\"
    }
