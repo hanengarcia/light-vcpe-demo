@@ -18,7 +18,9 @@
     name: "{{ remote_hostname }}"
     description: "off-net host {{ remote_hostname }}"
     inventory: "{{ inventory }}"
-    variables: "{\"ansible_host\": \"{{ remote_ipv4 }}\", \"ansible_port\": \"{{ remote_port }}\"}"
+    variables:
+        ansible_host: "{{ remote_ipv4 }}"
+        ansible_port: "{{ remote_port }}"
     state: present
     tower_verify_ssl: False
     tower_host: "{{ tower_host }}"
@@ -40,9 +42,9 @@
     name: "{{ remote_hostname }}"
     description: "off-net host {{ remote_hostname }}"
     organization: "{{ organization }}"
-    kind: ssh
-    username: "{{ username }}"
-    ssh_key_data: "/tmp/3ADE68B1-75BCD15/{{ remote_hostname }}/KEY"
+    inputs:
+        username: "{{ username }}"
+        ssh_key_data: "/tmp/3ADE68B1-75BCD15/{{ remote_hostname }}/KEY"
     state: present
     tower_verify_ssl: False
     credential_type: "{{ credential_type }}"
