@@ -1,0 +1,32 @@
+---
+# file: roles/openvpn/vars/main.yml
+#
+#ansible_connection: local
+remote_hostname: wan-pe-6558
+
+cli:
+    host: "{{ ansible_host }}"
+    username: vyos
+    password: vyos
+    transport: cli
+
+remote-host: '198.154.188.190'
+local-address: '10.255.1.2'
+local-port: 1195
+remote-address: '10.255.1.1'
+remote-port: 1195
+shared-secret-key-file: 'openvpn.key'
+
+networks:
+    net:
+        id: 20
+        device: eth0
+        inet: 0.0.0.0/24
+    lan:
+        id: 10
+        device: eth1
+        inet: 192.168.1.0/24
+    wan:
+        id: 5
+        device: vtun0
+        inet: 10.10.0.0/24

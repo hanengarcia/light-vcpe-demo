@@ -1,0 +1,21 @@
+### {{ ansible_managed }}
+#
+TYPE=Ethernet
+BRIDGE={{ interface_bridge_lan | lower }}
+BOOTPROTO=static
+IPADDR=0.0.0.0
+IPV4_FAILURE_FATAL=no
+PEERDNS=yes
+PEERROUTES=yes
+DEFROUTE=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_PEERDNS=yes
+IPV6_PEERROUTES=yes
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME={{ item }}
+UUID={{ item | to_uuid }}
+DEVICE={{ item }}
+ONBOOT=yes

@@ -1,0 +1,54 @@
+---
+# file: roles/openvpn/tasks/main.yml
+
+- name: Gather facts
+  vyos_facts:
+   gather_subset: all
+   provider: "{{ cli }}"
+  delegate_to: "{{ item }}"
+  with_items:
+    - "{{ remote_hostname }}"
+
+- name: Upload the openvpn shared-secret-key-file
+  copy:
+    src: "files/{{ shared-secret-key-file }}"
+    dest: "/config/auth/{{ shared-secret-key-file }}"
+  become: True
+
+- name: Configure site-to-site openvpn
+  vyos_config:
+    provider: "{{ cli }}"
+    backup: False
+    save: True
+    lines:
+        - set interfaces openvpn {{ networks.wan.device }} mode site-to-site
+        - set interfaces openvpn {{ networks.wan.device }} protocol udp
+        - set interfaces openvpn {{ networks.wan.device }} persistent-tunnel
+        - set interfaces openvpn {{ networks.wan.device }} remote-host {{ remote-host }}
+        - set interfaces openvpn {{ networks.wan.device }} local-port {{ local-port }}
+        - set interfaces openvpn {{ networks.wan.device }} local-address {{ local-address }}
+        - set interfaces openvpn {{ networks.wan.device }} remote-port {{ remote-port }}
+        - set interfaces openvpn {{ networks.wan.device }} remote-address {{ remote-address }}
+        - set interfaces openvpn {{ networks.wan.device }} shared-secret-key-file /config/auth/{{ shared-secret-key-file }}
+  delegate_to: "{{ remote_hostname }}"
+  
+- name: NAT rules configuration to exclude WAN from outbound traffic
+  vyos_config:
+    provider: "{{ cli }}"
+    backup: False
+    save: True
+    lines:
+        - set nat source rule {{ networks.wan.id }} destination address {{ networks.wan.inet }}
+        - set nat source rule {{ networks.wan.id }} 'exclude'
+        - set nat source rule {{ networks.wan.id }} outbound-interface {{ networks.net.device }}
+        - set nat source rule {{ networks.wan.id }} source address {{ networks.lan.inet }}
+
+- name: Configure RIP on the WAN interface
+  vyos_config:
+    provider: "{{ cli }}"
+    backup: False
+    save: True
+    lines:
+        - set protocols rip interface {{ networks.wan.device }}
+        - set protocols rip neighbor {{ remote-address }}
+        - set protocols rip network {{ networks.lan.inet }}

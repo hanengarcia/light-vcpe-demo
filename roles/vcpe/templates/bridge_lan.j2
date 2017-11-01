@@ -1,0 +1,8 @@
+### {{ ansible_managed }}
+#
+DEVICE={{ interface_bridge_lan | lower }}
+TYPE=Bridge
+BOOTPROTO=static
+IPADDR=192.168.1.1
+NETMASK=255.255.255.0
+ONBOOT=yes

@@ -1,0 +1,10 @@
+---
+sat6_ip: 198.154.188.146
+sat6_fqdn: satellite.keepontouch.net
+admin_user: admin
+admin_pass: "{{ vault_admin_pass }}"
+org: "Keep_Touch_Corp"
+loc: "Sydney"
+hostgroup: "false"
+activationkey: WAN_PE
+updatehost: "false"

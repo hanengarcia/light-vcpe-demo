@@ -1,0 +1,55 @@
+# Local Configuration:
+set interfaces openvpn vtun1 mode site-to-site
+set interfaces openvpn vtun1 protocol udp
+set interfaces openvpn vtun1 persistent-tunnel
+set interfaces openvpn vtun1 local-host '198.154.188.190'
+set interfaces openvpn vtun1 local-port '1195'
+set interfaces openvpn vtun1 remote-port '1195'
+set interfaces openvpn vtun1 shared-secret-key-file '/config/auth/openvpn-corp.key'
+set interfaces openvpn vtun1 local-address '10.255.1.1'
+set interfaces openvpn vtun1 remote-address '10.255.1.2'
+
+set protocols rip interface vtun1
+set protocols rip neighbor 10.255.1.2
+set protocols rip network 10.10.0.0/24
+
+
+# Remote Configuration:
+set interfaces openvpn vtun1 mode site-to-site
+set interfaces openvpn vtun1 protocol udp
+set interfaces openvpn vtun1 persistent-tunnel
+set interfaces openvpn vtun1 remote-host '198.154.188.190'
+set interfaces openvpn vtun1 local-port '1195'
+set interfaces openvpn vtun1 remote-port '1195'
+set interfaces openvpn vtun1 shared-secret-key-file '/config/auth/openvpn.key'
+set interfaces openvpn vtun1 local-address '10.255.1.2'
+set interfaces openvpn vtun1 remote-address '10.255.1.1'
+
+set protocols rip interface vtun1
+set protocols rip neighbor 10.255.1.1
+set protocols rip network 192.168.1.0/24
+
+set interfaces ethernet eth0 address dhcp
+set interfaces ethernet eth1 address 192.168.1.1/24
+
+set service dns forwarding name-server 8.8.8.8
+set service dns forwarding name-server 8.8.4.4
+set service dns forwarding listen-on eth1
+
+set service dhcp-server disabled false
+set service dhcp-server shared-network-name lan 
+set service dhcp-server shared-network-name lan authoritative enable
+set service dhcp-server shared-network-name lan subnet 192.168.1.0/24 start 192.168.1.100 stop 192.168.1.199
+set service dhcp-server shared-network-name lan subnet 192.168.1.0/24 default-router 192.168.1.1
+set service dhcp-server shared-network-name lan subnet 192.168.1.0/24 dns-server 192.168.1.1
+set service dhcp-server shared-network-name lan subnet 192.168.1.0/24 lease 86400
+
+set nat source rule 10 outbound-interface eth0
+set nat source rule 10 source address 192.168.1.0/24
+set nat source rule 10 translation address masquerade
+
+set nat source rule 5 destination address 10.10.0.0/24
+set nat source rule 5 'exclude'
+set nat source rule 5 outbound-interface eth0
+set nat source rule 5 source address 192.168.1.0/24
+

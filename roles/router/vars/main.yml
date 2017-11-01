@@ -1,0 +1,25 @@
+---
+# file: roles/router/vars/main.yml
+#
+
+ansible_connection: local
+
+cli:
+    host: "{{ ansible_host }}"
+    username: vyos
+    password: vyos
+    transport: cli
+    
+networks:
+    net:
+        id: 20
+        device: eth0
+        inet: 0.0.0.0/24
+    lan:
+        id: 10
+        device: eth1
+        inet: 192.168.1.0/24
+    wan:
+        id: 5
+        device: vtun1
+        inet: 10.0.31.21/24

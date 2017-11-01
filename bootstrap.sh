@@ -49,7 +49,7 @@ curl --fail --silent --insecure -X POST \
     \"remote_key_public\": \"${ssh_key_public_content}\"
    }
 }" > /dev/null 2>&1
-
+uuy
 if [ $? -eq 0 ]; then
     printf "Call back home is being processed\n"
 else

@@ -1,0 +1,57 @@
+---
+# file: roles/router/tasks/main.yml
+#
+#
+
+- name: Gather facts
+  vyos_facts:
+   gather_subset: all
+   provider: "{{ cli }}"
+
+- name: DNS service configuration for ISP network
+  vyos_config:
+    provider: "{{ cli }}"
+    backup: False
+    save: True
+    lines:
+        - set service dns forwarding listen-on '{{ links.isp.device }}'
+        - set service dns forwarding name-server 8.8.8.8
+        - set service dns forwarding name-server 8.8.4.4
+
+- name: Calculating subnets for ISP network
+  ipcalc: cidr={{ links.isp.inet }}
+
+- name: DHCP service configuration for ISP network
+  vyos_config:
+    provider: "{{ cli }}"
+    backup: False
+    save: True
+    lines:
+        - set service dhcp-server disabled 'false'
+        - set service dhcp-server shared-network-name isp-net authoritative 'enable'
+        - set service dhcp-server shared-network-name isp-net subnet {{ ipcalc_network }} start '{{ ipcalc_host_min }}' stop '{{ ipcalc_host_max }}'
+        - set service dhcp-server shared-network-name isp-net subnet {{ ipcalc_network }} default-router '{{ ipcalc_ip_addr }}'
+        - set service dhcp-server shared-network-name isp-net subnet {{ ipcalc_network }} dns-server '{{ ipcalc_ip_addr }}'
+        - set service dhcp-server shared-network-name isp-net subnet {{ ipcalc_network }} lease '86400'
+
+- name: NAT rules configuration for outbound traffic
+  vyos_config:
+    provider: "{{ cli }}"
+    backup: False
+    save: True
+    lines:
+       - set nat source rule {{ networks.net.id }} outbound-interface {{ networks.net.device }}
+       - set nat source rule {{ networks.net.id }} source address {{ networks.lan.inet }}
+       - set nat source rule {{ networks.net.id }} translation address masquerade
+
+- name: Calculating vxlan subnets for WAN network
+  ipcalc: cidr={{ vxlan.fw.inet }}
+
+- name: Set the WAN as default gateway
+  vyos_config:
+    provider: "{{ cli }}"
+    backup: False
+    save: True
+    lines:
+        - set system host-name router
+#        - set system gateway-address {{ ipcalc_host_min }}

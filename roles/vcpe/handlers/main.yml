@@ -1,0 +1,11 @@
+---
+# file: roles/vcpe/handlers/main.yml
+
+- name: start libvirtd
+  service: name=libvirtd state=started enabled=yes
+
+- name: start network
+  service: name=network state=started enabled=yes
+
+- name: restart network
+  service: name=network state=restarted
