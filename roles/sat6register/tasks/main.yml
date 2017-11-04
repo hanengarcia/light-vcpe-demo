@@ -3,17 +3,6 @@
 #
 # tasks register to satellite6 with or without puppet
 #
-#
-#- name: Download certificates from {{ sat6_fqdn }}
-#  get_url:
-#    url: "http://{{ sat6_fqdn }}/pub/katello-ca-consumer-latest.noarch.rpm"
-#    dest: /tmp/katello-ca-consumer-latest.noarch.rpm
-#  register: get_url_result
-#  until: get_url_result | succeeded
-#  retries: 10
-#  delay: 1
-#  ignore_errors: yes
-#  validate_certs: no
 
 - name: Install certificates from {{ sat6_fqdn }}
   yum:

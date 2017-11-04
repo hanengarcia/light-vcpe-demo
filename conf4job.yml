@@ -1,0 +1,6 @@
+---
+- hosts: tower
+  roles:
+    - conf4job
+  vars_files:
+    - roles/conf4job/vars/vault

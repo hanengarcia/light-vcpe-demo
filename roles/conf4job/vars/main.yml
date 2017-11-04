@@ -1,0 +1,15 @@
+---
+# file: roles/conf4job/tasks/main.yml
+#
+
+job_template: "REGISTER_HOST"
+inventory: "Branch Offices"
+job_type: run
+project: "sd-wan"
+playbook: "sat6add.yml"
+machine_credential: "{{ remote_hostname }}"
+machine_limit: "{{ remote_hostname }}"
+
+tower_host: "https://tower.keepontouch.net"
+#tower_username: "{{ vault_tower_username }}"
+#tower_password: "{{ vault_tower_password }}"

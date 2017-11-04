@@ -1,4 +1,6 @@
 ---
+# file: roles/hostadd/tasks/main.yml
+#
 # tasks to add host to tower inventory
 #
 - name: Add tower inventory

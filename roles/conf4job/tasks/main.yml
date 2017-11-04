@@ -1,0 +1,18 @@
+---
+# file: roles/conf4job/tasks/main.yml
+#
+
+- name: Configure Tower's job template
+  tower_job_template:
+    name: "{{ job_template }}"
+    job_type: "{{ job_type }}"
+    inventory: "{{ inventory }}"
+    project: "{{ project }}"
+    playbook: "{{ playbook }}"
+    machine_credential: "{{ machine_credential }}"
+    limit: "{{ machine_limit }}"
+    state: present
+    tower_verify_ssl: False
+    tower_host: "{{ tower_host }}"
+    tower_username: "{{ tower_username }}"
+    tower_password: "{{ tower_password }}"
