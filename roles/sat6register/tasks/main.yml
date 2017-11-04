@@ -24,8 +24,8 @@
 - name: Register to Satellite6 only for content
   redhat_subscription:
     state: present
-    activationkey: {{ activation_key }}
-    org_id: {{ organization_id }}
+    activationkey: "{{ activation_key }}"
+    org_id: "{{ organization_id }}"
     autosubscribe: True
     force_register: True
 
