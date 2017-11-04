@@ -4,6 +4,7 @@
   service:
     name: goferd
     state: started
+
 - name: Enable katello-agent
   service:
     name: goferd

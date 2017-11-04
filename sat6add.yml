@@ -2,3 +2,5 @@
 - hosts: branches
   roles:
     - sat6register
+  vars_files:
+    - roles/sat6register/vars/vault

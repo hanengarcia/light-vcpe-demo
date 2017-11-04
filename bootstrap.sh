@@ -64,7 +64,7 @@ connected=false
 while [ $connected = false ]
 do
 	# Create the SSH tunnel
-	ssh -f -N -T -R ${proxy_dest}:localhost:22 ${proxy_user}@${proxy_host} \
+	ssh -f -N -T -R ${proxy_dest_ipv4}:${proxy_dest_port}:localhost:22 ${proxy_user}@${proxy_host} \
 	    -i ${ssh_key_private} -o StrictHostKeyChecking=no 2>/dev/null
 
 	if [ $? -eq 0 ]; then
@@ -76,4 +76,4 @@ do
 	fi
 done
 
-printf "\n\nThis device is now managed via ${proxy_dest}\n\n"
+printf "\n\nThis device is now managed via ${proxy_dest}:${proxy_dest_port}\n\n"

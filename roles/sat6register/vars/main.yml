@@ -1,2 +1,11 @@
 ---
-# vars file for sat6register
+# file: roles/sat6register/vars/main.yml
+
+sat6_ip: 198.154.188.146
+sat6_fqdn: satellite.keepontouch.net
+
+organization_id: "Keep_Touch_Corp"
+activation_key: WAN_PE
+
+#satellite_username: "{{ vault_satellite_username }}"
+#satellite_password: "{{ vault_satellite_password }}"
