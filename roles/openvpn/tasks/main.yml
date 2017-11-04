@@ -1,13 +1,12 @@
 ---
 # file: roles/openvpn/tasks/main.yml
+#
+#
 
 - name: Gather facts
   vyos_facts:
    gather_subset: all
    provider: "{{ cli }}"
-  delegate_to: "{{ item }}"
-  with_items:
-    - "{{ remote_hostname }}"
 
 - name: Upload the openvpn shared-secret-key-file
   copy:
@@ -30,7 +29,6 @@
         - set interfaces openvpn {{ networks.wan.device }} remote-port {{ remote-port }}
         - set interfaces openvpn {{ networks.wan.device }} remote-address {{ remote-address }}
         - set interfaces openvpn {{ networks.wan.device }} shared-secret-key-file /config/auth/{{ shared-secret-key-file }}
-  delegate_to: "{{ remote_hostname }}"
   
 - name: NAT rules configuration to exclude WAN from outbound traffic
   vyos_config:

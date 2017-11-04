@@ -1,8 +1,7 @@
 ---
 # file: roles/openvpn/vars/main.yml
 #
-#ansible_connection: local
-remote_hostname: wan-pe-6558
+ansible_connection: local
 
 cli:
     host: "{{ ansible_host }}"

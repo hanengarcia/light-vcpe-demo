@@ -1,0 +1,4 @@
+---
+- hosts: branches
+  roles:
+    - sat6register

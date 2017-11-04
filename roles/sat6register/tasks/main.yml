@@ -1,10 +1,8 @@
 ---
+# file: roles/sat6register/tasks/main.yml
+#
 # tasks register to satellite6 with or without puppet
 #
-- name: Workaround if you have a non working DNS
-  lineinfile:
-    dest: /etc/hosts
-    line: "{{ sat6_ip }} {{ sat6_fqdn }} sat6"
 
 - name: Download bootstrap.py from the {{ sat6_fqdn }}
   get_url:
@@ -53,8 +51,3 @@
     - Start katello-agent
     - Enable katello-agent
 
-- name: Update the host to latest errata within the attached content view
-  yum:
-    name: '*'
-    state: latest
-  when: updatehost != 'false'
