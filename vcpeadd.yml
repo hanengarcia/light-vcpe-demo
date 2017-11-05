@@ -1,4 +1,5 @@
 ---
 - hosts: wan-pe-*
+  become: yes
   roles:
     - vcpe

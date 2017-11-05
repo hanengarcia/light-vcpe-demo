@@ -2,8 +2,5 @@
 # file: roles/router/defaults/main.yml
 #
 
-vxlan_destination_group: 239.1.1.1
-vxlan_destination_port: 8472
-
 ether_mtu: 1400
 vxlan_mtu: 1350

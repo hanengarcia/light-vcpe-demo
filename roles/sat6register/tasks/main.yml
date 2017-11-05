@@ -1,8 +1,5 @@
 ---
 # file: roles/sat6register/tasks/main.yml
-#
-# tasks register to satellite6 with or without puppet
-#
 
 - name: Install certificates from {{ sat6_fqdn }}
   yum:

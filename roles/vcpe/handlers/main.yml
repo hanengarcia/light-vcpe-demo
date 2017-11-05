@@ -1,11 +1,22 @@
 ---
 # file: roles/vcpe/handlers/main.yml
 
-- name: start libvirtd
-  service: name=libvirtd state=started enabled=yes
+- name: Start virtualization service
+  service:
+    name: libvirtd
+    state: started
 
-- name: start network
-  service: name=network state=started enabled=yes
+- name: Enable virtualization service
+  service:
+    name: libvirtd
+    enabled: yes
 
-- name: restart network
-  service: name=network state=restarted
+- name: Start network service
+  service:
+    name: network
+    state: started
+
+- name: Restart network service
+  service:
+    name: network
+    state: restarted

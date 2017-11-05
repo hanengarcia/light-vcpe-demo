@@ -1,5 +1,6 @@
 ---
 # handlers file for sat6register
+
 - name: Start katello-agent
   service:
     name: goferd

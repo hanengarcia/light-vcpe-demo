@@ -1,101 +1,78 @@
 ---
 # file: roles/vcpe/tasks/main.yml
 #
-#- name: Installing virtualization packages
-#  package:
-#    name: "{{ item }}"
-#    state: present
-#  notify: start libvirtd
-#  with_items:
-#    - "@Headless Virtualization"
 
-- name: Pause until libvirt is initialized
+- name: Installing virtualization packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "@Virtualization Hypervisor"
+
+- name: Ensure virtualization service is started
+  service:
+    name: libvirtd
+    state: started
+  notify:
+    - Enable virtualization service
+
+- name: Wait until virtualization service is initialized
   wait_for:
     path: /var/run/libvirt/libvirt-sock
 
-#
-####
-#
-# Enable networking
-#
-####
-#- name: Create WAN network bridge configuration
-#  template:
-#    src: "bridge_wan.j2"
-#    dest: '{{ interfaces_network_path }}/ifcfg-{{ interface_bridge_wan }}'
-#    backup: yes
-#  register: wan_bridge_result
-#
-#- name: Configure WAN network interfaces configuration
-#  template:
-#    src: 'ethernet_wan.j2'
-#    dest: '{{ interfaces_network_path }}/ifcfg-{{ item }}'
-#    backup: yes
-#  with_items: '{{ interfaces_ethernet_wan }}'
-#  register: wan_interfaces_result
-#
-#- name: Create LAN network bridge configuration
-#  template:
-#    src: 'bridge_lan.j2'
-#    dest: '{{ interfaces_network_path }}/ifcfg-{{ interface_bridge_lan }}'
-#    backup: yes
-#  register: lan_bridge_result
-#
-#- name: Create LAN network interfaces configuration
-#  template:
-#    src: 'ethernet_lan.j2'
-#    dest: '{{ interfaces_network_path }}/ifcfg-{{ item }}'
-#    backup: yes
-#  with_items: '{{ interfaces_ethernet_bridge_lan }}'
-#  register: lan_interfaces_result
+- name: Delete existing LAN bridge
+  command: brctl delbr {{ interface_bridge_lan }}
+  ignore_errors: yes
 
-- name: Create LAN network bridge
-  command: brctl addbr {{ interface_bridge_lan }}
-#  command: nmcli con add type bridge ifname "{{ interface_bridge_lan }}"
-#  nmcli:
-#    conn_name: "{{ interface_bridge_lan }}"
-#    ifname: "{{ interface_bridge_lan }}"
-#    type: bridge
-#    stp: True
-#    state: present
-
-- name: Enable STP on LAN network bridge
-  command: brctl stp {{ interface_bridge_lan }} on
-
-- name: Add interfaces to LAN network bridge
+- name: Create LAN bridge
+  command: "{{ item }}"
+  with_items:
+    - brctl addbr {{ interface_bridge_lan }}
+    - brctl stp {{ interface_bridge_lan }} on
+    
+- name: Add interfaces to LAN bridge
   command: brctl addif {{ interface_bridge_lan }} {{ item }}
   with_items: "{{ interfaces_ethernet_bridge_lan }}"
-#  command: nmcli con add type ethernet ifname "{{ item }}" master "{{ interface_bridge_lan }}"
-#  nmcli:  
-#    conn_name: "{{ interface_bridge_lan }}"
-#    ifname: "{{ item }}"
-#    type: ethernet
-#    state: present
-#
-#- name: Deploy virtual router image
-#  copy:
-#    src: "{{ upload_directory }}/{{ router_version }}.qcow2"
-#    dest: "/var/lib/libvirt/images/{{ router_version }}.qcow2"
-#    remote_src: yes
-#    force: no
-#
-#- name: Define the virtual router
-#  virt:
-#    name: router
-#    command: define
-#    xml: "{{ upload_directory }}/{{ router_version }}.xml"
-#
-#- name: Start the virtual router
-#  virt:
-#    name: router
-#    state: running
-#  register: router_running
-#  
-#- name: Show the results
-#  debug:
-#    var: router_running
-#
-#
-# http://secomputing.co.uk/2012/02/21/Forwarding-ports-to-KVM-clients/
-- name: Redirect local port to virtual router
-  command: virsh qemu-monitor-command --hmp router 'hostfwd_add ::2222-:22'
+
+- name: Upload virtual router image
+  copy:
+    src: "files/{{ router_version }}.qcow2.tar.gz"
+    dest: "{{ upload_directory }}/"
+    remote_src: no
+    force: no
+  when: preloaded == "no"
+
+- name: Unarchive virtual router image
+  unarchive:
+    src: "{{ upload_directory }}/{{ router_version }}.qcow2.tar.gz"
+    dest: "{{ upload_directory }}/"
+    remote_src: yes
+    force: no
+  when: preloaded == "no"
+
+- name: Deploy virtual router image
+  command: mv {{ upload_directory }}/{{ router_version }}.qcow2 /var/lib/libvirt/images/{{ router_version }}.qcow2
+  when: preloaded == "no"
+    
+- name: Upload virtual router definition
+  template:
+    src: "{{ router_version }}.xml.j2"
+    dest: "{{ upload_directory}}/{{ router_version }}.xml"
+    remote_src: no
+    force: yes
+
+- name: Define the virtual router
+  virt:
+    name: "{{ router_hostname }}"
+    command: define
+    xml: "{{ upload_directory }}/{{ router_version }}.xml"
+
+- name: Start the virtual router
+  virt:
+    name: "{{ router_hostname }}"
+    state: running
+  register: router_running
+ 
+- name: Show the results
+  debug:
+    var: router_running

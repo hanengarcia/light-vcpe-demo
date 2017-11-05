@@ -29,7 +29,6 @@ ssh_key_public_content=`cat $ssh_key_public`
 ### Get Proxy credentials
 proxy_user=`hostname -s`
 proxy_host='198.154.188.151'
-proxy_dest='172.28.1.20:8080'
 proxy_dest_ipv4='172.28.1.20'
 proxy_dest_port='8080'
 
@@ -84,4 +83,4 @@ do
     fi
 done
 
-printf "\n\nThis device is now managed via ${proxy_dest}:${proxy_dest_port}\n\n"
+printf "\n\nThis device is now managed via ${proxy_dest_ipv4}:${proxy_dest_port}\n\n"
