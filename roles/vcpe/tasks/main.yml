@@ -63,9 +63,9 @@
 
 - name: Define the virtual router
   virt:
-    name: "{{ router_hostname }}"
     command: define
-    xml: "{{ upload_directory }}/{{ router_version }}.xml"
+    name: "{{ router_hostname }}"
+    xml: "{{ lookup('template', '{{ router_version }}.xml.j2') }}"
 
 - name: Start the virtual router
   virt:
