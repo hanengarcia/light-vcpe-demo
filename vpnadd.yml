@@ -1,4 +1,4 @@
 ---
-- hosts: routers
+- hosts: all
   roles:
     - openvpn
