@@ -1,5 +1,5 @@
 ---
-- hosts: wan-pe-*
+- hosts: branches
   become: yes
   roles:
     - vcpe

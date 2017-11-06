@@ -6,12 +6,12 @@ interfaces_network_path: "/etc/sysconfig/network-scripts"
 interface_bridge_wan: "brwan"
 interface_bridge_lan: "brlan"
 interfaces_ethernet_bridge_wan:
-    - eth0
+    - enp1s0
 interfaces_ethernet_bridge_lan:
-    - eth1
+    - enp2s0
 
 router_version: "vyos-1.1.7-i586-virt"
-router_hostname: "{{ remote_hostname |  }}"
+router_hostname: "{{ remote_hostname | regex_replace('^wan-pe','router') }}"
 router_vcpu: 2
 router_vram: 1
 upload_directory: "/root"
