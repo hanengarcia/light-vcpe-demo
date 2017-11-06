@@ -7,5 +7,7 @@ inventory: "Branch Offices"
 
 tower_host: "https://tower.keepontouch.net"
 credential_type: "Machine"
+ssh_key_directory: "/tmp/keys"
+
 #tower_username: "{{ vault_tower_username }}"
 #tower_password: "{{ vault_tower_password }}"

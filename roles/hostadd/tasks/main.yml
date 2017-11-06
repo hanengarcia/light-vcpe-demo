@@ -31,7 +31,7 @@
 
 - name: Create local private key directory
   file:
-    path: "/var/lib/awx/.ssh/"
+    path: "{{ ssh_key_directory }}"
     owner: 'awx'
     group: 'awx'
     mode: 'u=rwx'
@@ -40,7 +40,7 @@
 - name: Create local private key file
   template:
     src: decoded_key.j2
-    dest: "/var/lib/awx/.ssh/{{ remote_hostname }}"
+    dest: "{{ ssh_key_directory }}/{{ remote_hostname }}"
     owner: 'awx'
     group: 'awx'
     mode: 'u=rw'
@@ -51,7 +51,7 @@
     description: "off-net host {{ remote_hostname }}"
     organization: "{{ organization }}"
     username: "{{ remote_username }}"
-    ssh_key_data: "/var/lib/awx/.ssh/{{ remote_hostname }}"
+    ssh_key_data: "{{ ssh_key_directory }}/{{ remote_hostname }}"
     state: present
     tower_verify_ssl: False
     credential_type: "{{ credential_type }}"
