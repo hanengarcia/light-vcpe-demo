@@ -2,6 +2,8 @@
 # variable for all groups host
 #
 
+ansible_connection: local
+
 organization: "Keep|Touch Corp"
 inventory: "Branch Offices"
 
