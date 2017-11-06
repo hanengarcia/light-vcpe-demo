@@ -39,6 +39,7 @@ generate_post_data()
 {
     "extra_vars":
     {
+        "remote_username": "root"
         "remote_hostname": "$proxy_user",
 		"remote_ipv4": "$proxy_dest_ipv4",
 		"remote_port": "$proxy_dest_port",

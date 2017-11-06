@@ -3,10 +3,6 @@
 #
 #
 
-- name: Gather facts
-  vyos_facts:
-    gather_subset: all
-
 - name: DNS service configuration for LAN network
   vyos_config:
     provider: "{{ cli }}"

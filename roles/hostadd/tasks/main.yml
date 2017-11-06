@@ -31,21 +31,27 @@
 
 - name: Create local private key directory
   file:
-    path: "/tmp/3ADE68B1-75BCD15/{{ remote_hostname }}"
+    path: "/var/lib/awx/.ssh/"
+    owner: 'awx'
+    group: 'awx'
+    mode: 'u=rwx'
     state: directory
 
 - name: Create local private key file
   template:
     src: decoded_key.j2
-    dest: "/tmp/3ADE68B1-75BCD15/{{ remote_hostname }}/KEY"
+    dest: "/var/lib/awx/.ssh/{{ remote_hostname }}"
+    owner: 'awx'
+    group: 'awx'
+    mode: 'u=rw'
 
 - name: Add host credential to tower
   tower_credential:
     name: "{{ remote_hostname }}"
     description: "off-net host {{ remote_hostname }}"
     organization: "{{ organization }}"
-    username: "{{ username }}"
-    ssh_key_data: "/tmp/3ADE68B1-75BCD15/{{ remote_hostname }}/KEY"
+    username: "{{ remote_username }}"
+    ssh_key_data: "/var/lib/awx/.ssh/{{ remote_hostname }}"
     state: present
     tower_verify_ssl: False
     credential_type: "{{ credential_type }}"
@@ -53,7 +59,3 @@
     tower_username: "{{ tower_username }}"
     tower_password: "{{ tower_password }}"
 
-- name: Remove local private key directory
-  file:
-    path: "/tmp/3ADE68B1-75BCD15/{{ remote_hostname }}"
-    state: absent
