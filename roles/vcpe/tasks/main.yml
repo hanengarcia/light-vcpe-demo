@@ -2,13 +2,6 @@
 # file: roles/vcpe/tasks/main.yml
 #
 
-- name: Installing virtualization packages
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - "@Virtualization Hypervisor"
-
 - name: Ensure virtualization service is started
   service:
     name: libvirtd
