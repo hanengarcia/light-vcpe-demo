@@ -4,8 +4,6 @@
 #
 ansible_connection: local
 
-ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o ProxyCommand="ssh -q -i /etc/ansible/keys/bastion.key -W %h:%p {{ remote_username }}@{{ remote_ipv4 }} -p {{ remote_port }}"'
-
 cli:
     host: "{{ ansible_host }}"
     username: vyos
