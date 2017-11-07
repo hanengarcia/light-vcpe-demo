@@ -12,7 +12,7 @@
     backup: False
     save: True
     lines:
-        - set interface ethernet '{{ networks.lan.device }}' address {{ ipcalc_ip_addr }}
+        - set interface ethernet '{{ networks.lan.device }}' address '{{ ipcalc_cidr }}'
 
 - name: DNS service configuration for LAN network
   vyos_config:
