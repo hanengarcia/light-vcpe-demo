@@ -29,12 +29,12 @@ set protocols rip interface vtun1
 set protocols rip neighbor 10.255.1.1
 set protocols rip network 192.168.1.0/24
 
-set interfaces ethernet eth0 address dhcp
-set interfaces ethernet eth1 address 192.168.1.1/24
+set interfaces ethernet eth2 address dhcp
+set interfaces ethernet eth3 address 192.168.1.1/24
 
 set service dns forwarding name-server 8.8.8.8
 set service dns forwarding name-server 8.8.4.4
-set service dns forwarding listen-on eth1
+set service dns forwarding listen-on eth3
 
 set service dhcp-server disabled false
 set service dhcp-server shared-network-name lan 
@@ -44,12 +44,12 @@ set service dhcp-server shared-network-name lan subnet 192.168.1.0/24 default-ro
 set service dhcp-server shared-network-name lan subnet 192.168.1.0/24 dns-server 192.168.1.1
 set service dhcp-server shared-network-name lan subnet 192.168.1.0/24 lease 86400
 
-set nat source rule 10 outbound-interface eth0
+set nat source rule 10 outbound-interface eth2
 set nat source rule 10 source address 192.168.1.0/24
 set nat source rule 10 translation address masquerade
 
 set nat source rule 5 destination address 10.10.0.0/24
 set nat source rule 5 'exclude'
-set nat source rule 5 outbound-interface eth0
+set nat source rule 5 outbound-interface eth2
 set nat source rule 5 source address 192.168.1.0/24
 

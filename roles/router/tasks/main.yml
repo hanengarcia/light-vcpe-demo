@@ -9,8 +9,8 @@
 - name: Set configuration for LAN network
   vyos_config:
     provider: "{{ cli }}"
-    backup: False
-    save: True
+    backup: no
+    save: yes
     lines:
         - set interface ethernet '{{ networks.lan.device }}' address '{{ ipcalc_cidr }}'
 
