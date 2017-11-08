@@ -69,3 +69,10 @@
 - name: Show the results
   debug:
     var: router_running
+    
+- name: Set static IP interfaces to LAN bridge
+  command: ifconfig {{ item }} 0.0.0.0
+  with_items: "{{ interfaces_ethernet_bridge_lan }}"
+  
+- name: Set static IP interfaces to LAN bridge
+  command: ifconfig {{ interface_bridge_lan }} 0.0.0.0 
